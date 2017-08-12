@@ -83,7 +83,8 @@ if has('gui_running')
     set background=light
     colorscheme solarized
 else
-    colorscheme zenburn
+    set background=dark
+    colorscheme solarized
 endif
 
 " Allow advanced mouse controls

@@ -93,26 +93,8 @@ if [ -f `which powerline-daemon` ]; then
   powerline-daemon -q
   POWERLINE_BASH_CONTINUATION=1
   POWERLINE_BASH_SELECT=1
-  . /usr/share/powerline/bindings/bash/powerline.sh
+  . /usr/share/powerline/bash/powerline.sh
 fi
-
-# Convenience alias for battery checking
-alias battstat="upower -i /org/freedesktop/UPower/devices/battery_BAT0"
-
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -128,6 +110,51 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+
+# A shortcut function that simplifies usage of xclip.
+# - Accepts input from either stdin (pipe), or params.
+# ------------------------------------------------
+cb() {
+    local _scs_col="\e[0;32m"; local _wrn_col='\e[1;31m'; local _trn_col='\e[0;33m'
+    # Check that xclip is installed.
+    if ! type xclip > /dev/null 2>&1; then
+        echo -e "$_wrn_col""You must have the 'xclip' program installed.\e[0m"
+        # Check user is not root (root doesn't have access to user xorg server)
+    elif [[ "$USER" == "root" ]]; then
+        echo -e "$_wrn_col""Must be regular user (not root) to copy a file to the clipboard.\e[0m"
+    else
+        # If no tty, data should be available on stdin
+        if ! [[ "$( tty )" == /dev/* ]]; then
+            input="$(< /dev/stdin)"
+        # Else, fetch input from params
+        else
+            input="$*"
+        fi
+        if [ -z "$input" ]; then  # If no input, print usage message.
+            echo "Copies a string to the clipboard."
+            echo "Usage: cb <string>"
+            echo "       echo <string> | cb"
+        else
+            # Copy input to clipboard
+            echo -n "$input" | xclip -selection c
+            # Truncate text for status
+            if [ ${#input} -gt 80 ]; then input="$(echo $input | cut -c1-80)$_trn_col...\e[0m"; fi
+            # Print status.
+            echo -e "$_scs_col""Copied to clipboard:\e[0m $input"
+        fi
+    fi
+}
+# Aliases / functions leveraging the cb() function
+# ------------------------------------------------
+# Copy contents of a file
+function cbf() { cat "$1" | cb; }  
+# Copy SSH public key
+alias cbssh="cbf ~/.ssh/id_rsa.pub"  
+# Copy current working directory
+alias cbwd="pwd | cb"  
+# Copy most recent command in bash history
+alias cbhs="cat $HISTFILE | tail -n 1 | cb"  
 
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/geohh/anaconda3/bin:$PATH"
