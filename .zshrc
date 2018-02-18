@@ -1,3 +1,4 @@
+export TERM="xterm-256color"
 source ~/.antigen/antigen.zsh
 
 antigen use oh-my-zsh
@@ -68,7 +69,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git extract tsm virtualenv)
+plugins=(git extract virtualenv command-not-found systemd zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -83,7 +84,7 @@ export MANPATH="/usr/local/man:$MANPATH"
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='vim'
 fi
 
 # Compilation flags
@@ -150,6 +151,9 @@ alias cbhs="cat $HISTFILE | tail -n 1 | cb"
 if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
 fi
+
+export RISCV="/home/geohh/.local/share/riscv"
+export PATH=$PATH:"/home/geohh/.local/share/riscv/bin"
 
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/geohh/anaconda3/bin:$PATH"
