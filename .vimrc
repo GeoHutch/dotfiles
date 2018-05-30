@@ -36,6 +36,9 @@ Plugin 'Lokaltog/powerline'
 " Rust Language configuration
 Plugin 'rust-lang/rust.vim'
 
+" Vim-tmux command line interaction
+Plugin 'benmills/vimux'
+
 " All of your Plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on    " required

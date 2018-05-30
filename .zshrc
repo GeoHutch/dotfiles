@@ -7,13 +7,16 @@ antigen bundle git
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
 
+# functions for controlling private data in public repositories
+antigen bundle StackExchange/blackbox
+
 antigen theme bhilburn/powerlevel9k powerlevel9k
 
 antigen apply
 
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -157,6 +160,10 @@ export PATH=$PATH:"/home/geohh/.local/share/riscv/bin"
 
 # added by Anaconda3 4.2.0 installer
 export PATH="/home/geohh/anaconda3/bin:$PATH"
+
+#Allow snap packages to be run from command line
+export PATH=$PATH:"/var/lib/snapd/snap/bin"
+
 
 if ! { [ -n "$TMUX" ]; } then
     tmux attach -t base || tmux new -s base
